@@ -1,0 +1,72 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('organization_id')->nullable();
+            $table->string('username')->unique();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('email')->unique();
+            $table->text('bio')->nullable();
+            $table->string('profile_picture_url')->nullable();
+            $table->string('profile_picture_id')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->enum('gender', ['M', 'F', 'O'])->nullable();
+            $table->enum('account_role', ['student', 'teacher', 'admin'])->default('student');
+            $table->string('phone_number')->nullable();
+            $table->date('registration_date')->nullable();
+            $table->date('last_login')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->enum('status', ['active', 'inactive', 'banned'])->default('active');
+            $table->string('address')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
+            $table->decimal('point')->default(0.0);
+            $table->timestamp('email_verified_at')->nullable();
+
+            // $table->enum('preferred_theme', ['light', 'dark'])->default('light');
+            // $table->enum('preferred_language', ['en', 'es', 'fr', 'de'])->default('fr');
+            // $table->enum('time_zone', ['UTC', 'CET', 'EST', 'PST'])->default('UTC');
+
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->string('email')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
+        });
+
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('sessions');
+    }
+};

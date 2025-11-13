@@ -42,7 +42,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                         onClick={cleanup}
                     >
                         <Settings className="mr-2" />
-                        Settings
+                        Paramètres
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -55,8 +55,8 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                     onClick={handleLogout}
                     data-test="logout-button"
                 >
-                    <LogOut className="mr-2" />
-                    Log out
+                    <LogOut className="mr-2 text-red-700" />
+                    Se déconnecter
                 </Link>
             </DropdownMenuItem>
         </>

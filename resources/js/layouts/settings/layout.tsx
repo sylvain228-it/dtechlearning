@@ -17,17 +17,17 @@ const sidebarNavItems: NavItem[] = [
         icon: null,
     },
     {
-        title: 'Password',
+        title: 'Mot de passe',
         href: editPassword(),
         icon: null,
     },
     {
-        title: 'Two-Factor Auth',
+        title: 'Authentification à deux facteurs',
         href: show(),
         icon: null,
     },
     {
-        title: 'Appearance',
+        title: 'Appareance',
         href: editAppearance(),
         icon: null,
     },
