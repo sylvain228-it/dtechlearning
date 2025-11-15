@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Admin>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Organization>
  */
-class AdminFactory extends Factory
+class OrganizationFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,7 @@ class AdminFactory extends Factory
     public function definition(): array
     {
         return [
-            'username' => fake()->unique()->userName(),
+            'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= 'password',
