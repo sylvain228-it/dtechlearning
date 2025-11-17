@@ -30,10 +30,14 @@ import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { cn, isSameUrl, resolveUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
-import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
+import {
+    type AdminSharedData,
+    type BreadcrumbItem,
+    type NavItem,
+} from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
-import { default as AppLogo, default as AppLogoIcon } from './app-logo-icon';
+import AppLogo from '../app-logo-icon';
 
 const mainNavItems: NavItem[] = [
     {
@@ -63,8 +67,8 @@ interface AppHeaderProps {
     breadcrumbs?: BreadcrumbItem[];
 }
 
-export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
-    const page = usePage<SharedData>();
+export function AdminHeader({ breadcrumbs = [] }: AppHeaderProps) {
+    const page = usePage<AdminSharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
     return (
@@ -91,7 +95,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     Navigation Menu
                                 </SheetTitle>
                                 <SheetHeader className="flex justify-start text-left">
-                                    <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
+                                    <AppLogo className="h-6 w-6 fill-current text-black dark:text-white" />
                                 </SheetHeader>
                                 <div className="flex h-full flex-1 flex-col space-y-4 p-4">
                                     <div className="flex h-full flex-col justify-between text-sm">
@@ -232,18 +236,24 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                     className="size-10 rounded-full p-1"
                                 >
                                     <Avatar className="size-8 overflow-hidden rounded-full">
-                                        <AvatarImage
-                                            src={auth.user.profile_picture_url}
-                                            alt={auth.user.username}
-                                        />
+                                        {auth.admin.profile_picture_url !=
+                                            null && (
+                                            <AvatarImage
+                                                src={
+                                                    auth.admin
+                                                        .profile_picture_url
+                                                }
+                                                alt={auth.admin.username}
+                                            />
+                                        )}
                                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                            {getInitials(auth.user.username)}
+                                            {getInitials(auth.admin.username)}
                                         </AvatarFallback>
                                     </Avatar>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="end">
-                                <UserMenuContent user={auth.user} />
+                                <UserMenuContent user={auth.admin} />
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

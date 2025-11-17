@@ -23,6 +23,9 @@ return new class extends Migration
             $table->text('s_address')->nullable();
             $table->string('logo_url')->nullable();
             $table->string('logo_url_id')->nullable();
+            $table->string('cover_url')->nullable();
+            $table->string('cover_id')->nullable();
+            $table->string('website_url')->nullable();
             $table->json('theme')->nullable(); // pour les couleurs, logo, etc.
             $table->enum('type', ['university', 'training_center'])->default('training_center');
             $table->enum('billing_plan', ['free', 'standard', 'premium'])->default('standard');

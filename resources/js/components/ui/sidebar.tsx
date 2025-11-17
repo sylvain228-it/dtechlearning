@@ -1,7 +1,8 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { SquareChevronLeft } from "lucide-react"
+// import { SquareChevronLeft } from "lucide-react"
+import { MdMenuOpen } from "react-icons/md";
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -260,16 +261,16 @@ function SidebarTrigger({
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
-      size="icon"
-      className={cn("h-7 w-7", className)}
+      size="default"
+      className={cn("h-7 w-7 cursor-pointer", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
       }}
       {...props}
     >
-     <SquareChevronLeft/>
-      <span className="sr-only">Toggle Sidebar</span>
+     <MdMenuOpen/>
+      {/* <span className="sr-only">Toggle Sidebar</span> */}
     </Button>
   )
 }
