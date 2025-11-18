@@ -16,18 +16,25 @@ import {
     partners,
     teachers,
 } from '@/routes/admin';
+import categories from '@/routes/admin/categories';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, Gauge } from 'lucide-react';
 import { FaBook } from 'react-icons/fa';
 import { FaBuildingColumns, FaUsersLine } from 'react-icons/fa6';
 import { GiTeacher } from 'react-icons/gi';
+import { MdCategory } from 'react-icons/md';
 import AppLogo from '../app-logo-icon';
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: Gauge,
+    },
+    {
+        title: 'Catégories',
+        href: categories.index(),
+        icon: MdCategory,
     },
     {
         title: 'Cours',

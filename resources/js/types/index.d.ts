@@ -124,6 +124,14 @@ export interface Partner {
     updated_at: string;
     [key: string]: unknown;
 }
+export interface Category {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    category_id: number;
+    is_active: boolean;
+}
 
 export interface PaginationMeta {
     current_page: number;

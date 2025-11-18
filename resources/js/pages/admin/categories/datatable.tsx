@@ -10,7 +10,7 @@ import {
     useReactTable,
     VisibilityState,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react';
+import { ChevronDown, MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -33,12 +33,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Partner } from '@/types';
+import { destroy, edit } from '@/routes/admin/categories';
+import { Category } from '@/types';
+import { Link, router } from '@inertiajs/react';
 import React from 'react';
 import { FaEdit } from 'react-icons/fa';
-import { MdDelete, MdVisibility } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 
-export const columns: ColumnDef<Partner>[] = [
+export const columns: ColumnDef<Category>[] = [
     {
         id: 'select',
         header: ({ table }) => (
@@ -70,48 +72,23 @@ export const columns: ColumnDef<Partner>[] = [
             <div className="capitalize">{row.getValue('name')}</div>
         ),
     },
-    {
-        accessorKey: 'email',
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() =>
-                        column.toggleSorting(column.getIsSorted() === 'asc')
-                    }
-                >
-                    Email
-                    <ArrowUpDown />
-                </Button>
-            );
-        },
-        cell: ({ row }) => (
-            <div className="lowercase">{row.getValue('email')}</div>
-        ),
-    },
-    {
-        accessorKey: 'phone_number',
-        header: () => <div className="text-right">Téléphone</div>,
-        cell: ({ row }) => {
-            const phone = row.getValue('phone_number');
 
-            //   // Format the amount as a dollar amount
-            //   const formatted = new Intl.NumberFormat("en-US", {
-            //     style: "currency",
-            //     currency: "USD",
-            //   }).format(amount)
-
-            return (
-                <div className="text-right font-medium">{phone as string}</div>
-            );
-        },
-    },
     {
         id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
-            const partner = row.original;
+            const category = row.original;
 
+            function handleDelete(e: React.MouseEvent) {
+                e.preventDefault();
+                if (
+                    confirm(
+                        'Êtes-vous sûr de vouloir supprimer cette catégorie ?',
+                    )
+                ) {
+                    router.delete(destroy(category.id));
+                }
+            }
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -124,27 +101,23 @@ export const columns: ColumnDef<Partner>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() =>
-                                navigator.clipboard.writeText(
-                                    partner.email ?? '',
-                                )
+                                navigator.clipboard.writeText(category.name)
                             }
                         >
-                            Copier email
+                            Copier le nom
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-app-blue">
-                            Détails
-                            <DropdownMenuShortcut>
-                                <MdVisibility className="text-app-blue" />
-                            </DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Modifier
-                            <DropdownMenuShortcut>
-                                <FaEdit className="text-blue-500" />
-                            </DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
+
+                        <Link href={edit(category.id)}>
+                            <DropdownMenuItem>
+                                Modifier
+                                <DropdownMenuShortcut>
+                                    <FaEdit className="text-blue-500" />
+                                </DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                        </Link>
+
+                        <DropdownMenuItem onClick={handleDelete}>
                             Supprimer
                             <DropdownMenuShortcut>
                                 <MdDelete className="text-red-500" />
@@ -157,10 +130,10 @@ export const columns: ColumnDef<Partner>[] = [
     },
 ];
 
-export default function PartnersDataTable({
-    partners,
+export default function CategoryDataTable({
+    categories,
 }: {
-    partners: Partner[];
+    categories: Category[];
 }) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -170,7 +143,7 @@ export default function PartnersDataTable({
     const [rowSelection, setRowSelection] = React.useState({});
 
     const table = useReactTable({
-        data: partners,
+        data: categories,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -190,27 +163,34 @@ export default function PartnersDataTable({
 
     return (
         <div className="w-full">
-            <div className="flex items-center py-4">
+            <div className="flex items-center justify-between py-4">
                 <Input
-                    placeholder="Filter emails..."
+                    placeholder="Filter nom..."
                     value={
-                        (table
-                            .getColumn('email')
-                            ?.getFilterValue() as string) ?? ''
+                        (table.getColumn('name')?.getFilterValue() as string) ??
+                        ''
                     }
                     onChange={(event) =>
                         table
-                            .getColumn('email')
+                            .getColumn('name')
                             ?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Colonne <ChevronDown />
-                        </Button>
-                    </DropdownMenuTrigger>
+                    <div className="space-x-3">
+                        {/* <Link
+                            href={create()}
+                            className="btn-primary ml-auto inline-block bg-app-blue !py-2 text-white"
+                        >
+                            Ajouter <IoAdd className="inline-block h-7 w-7" />
+                        </Link> */}
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="ml-auto">
+                                Colonne <ChevronDown />
+                            </Button>
+                        </DropdownMenuTrigger>
+                    </div>
                     <DropdownMenuContent align="end">
                         {table
                             .getAllColumns()

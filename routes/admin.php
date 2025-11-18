@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminCoursesController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEtudiantsController;
@@ -17,6 +18,7 @@ Route::group(['prefix' => '/dtech-hpanel', 'middleware' => ['auth.admin'], 'as' 
     Route::get('/teachers', [AdminTeachersController::class, 'index'])->name('teachers');
     Route::get('/cours', [AdminCoursesController::class, 'index'])->name('courses');
     Route::get('/etudiants', [AdminEtudiantsController::class, 'index'])->name('etudiants');
+    Route::resource('categories', AdminCategoryController::class);
 });
 Route::group(['as' => 'admin.', 'middleware' => ['guest']], function () {
     Route::get('/dtech-hpanel-login', [AdminLoginController::class, 'showLoginForm'])->name('login');
